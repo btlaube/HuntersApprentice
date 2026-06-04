@@ -1,6 +1,38 @@
 // Game Notes
 
 
+// In Scene Hierarchy:
+    // Bootstrap scene
+        // First to load when game starts, contains only the PersistingSystemsRoot GameObject with all persisting systems as children
+    // Menu scene
+        // PersistingSystemsRoot (from bootstrap scene)
+    // Gameplay scene
+        // PersistingSystemsRoot (from bootstrap scene)
+        // Possible Game scene objects:
+            // Player
+            // Enemies
+            // Bosses
+            // NPCs
+            // Interactive objects (doors, levers, chests, etc.)
+            // Environmental hazards (traps, spikes, etc.)
+            // Collectibles (items, currency, etc.)
+
+
+// Psuedocode
+// public class PersistingSystemsRoot
+    // public PersistingSystemsRoot Instance { get; private set;}
+    // void Awake()
+    // {
+        // Set Instance
+        // DontDestoryOnLoad()
+    // }
+    // void Start()
+    // {
+        // GameManager.Initialize()
+        // UIManager.Initialize()
+        // Etc.
+        // Load Main menu scene
+    // }
 
 // All Systems
 
@@ -129,3 +161,100 @@
         // StPause
             // Can transition to StOptions
             // 
+
+
+// Player Specific Systems
+    // PlayerHealth
+    // PlayerDeath
+    // PlayerMovement
+    // PlayerJump
+    // PlayerGravity
+    // PlayerDash
+        // Dash types based on equipped effect:
+            // Base dash (no effect)
+            // Fire dash (leaves a trail of fire that damages enemies and can ignite certain objects in the environment)
+            // Ice dash (leaves a trail of ice that slows enemies and can freeze certain objects in the environment)
+            // Electric dash (leaves a trail of electricity that shocks enemies and can electrify certain objects in the environment)
+            // Wind dash (creates a gust of wind that knocks back enemies and can activate certain objects in the environment)
+    // PlayerCombat
+        // PlayerMelee
+            // Melee types based on equipped effect: 
+                // Base melee attack (no effect)
+                // Fire melee attack (burns enemies, can ignite certain objects in the environment)
+                // Ice melee attack (slows enemies, can freeze certain objects in the environment)
+                // Electric melee attack (shocks enemies, can electrify certain objects in the environment)
+                // Wind melee attack (knocks back enemies, can activate certain objects in the environment)
+        // PlayerRanged
+            // Ranged attack types based on equipped effect:
+                // Base ranged attack (no effect)
+                // Fire ranged attack (burns enemies, can ignite certain objects in the environment)
+                // Ice ranged attack (slows enemies, can freeze certain objects in the environment)
+                // Electric ranged attack (shocks enemies, can electrify certain objects in the environment)
+                // Wind ranged attack (knocks back enemies, can activate certain objects in the environment)
+    // PlayerVelocity
+    // PlayerAnimator
+    // PlayerStateManager
+    // PlayerCollisionHandler
+
+// Enemy Specific Systems
+    // EnemyHealth
+    // EnemyDeath
+    // EnemyMovement
+    // EnemyCombat
+    // EnemyAI
+    // EnemyAnimator
+    // EnemyStateManager
+    // Interfaces
+        // IFlammable, IFreezable, IShockable, IKnockbackable
+
+// Interactable Environment
+    // Breakables
+        // Takes basic damage from the player
+    // Flammables
+        // Can have fire elemental effect applied
+    // Freezables
+        // Can have 
+    // Shockables
+        // Powerables
+            // Can be activated by electricity elemental effects
+    // Knockbackables
+
+
+// Permanent Breakables
+    // When broken, trigger specific flag for breakableID in WorldDataManager
+
+// Boss
+    // When defeatred, trigger specific flag for bossID in WorldDataManager
+
+// Doors, switches, breakable walls, etc
+    // When interacted with, trigger specific flag in WorldDataManager
+
+// Elemental Effects System
+    // Base elemental effects:
+        // Fire
+        // Ice
+        // Electric
+        // Wind
+
+// IFlammable
+    // Interface for objects that can be ignited by the fire elemental effect
+    // Methods:
+        // Ignite()
+        // Extinguish()
+
+// IFreezable
+    // Interface for objects that can be frozen by the ice elemental effect
+    // Methods:
+        // Freeze()
+        // Unfreeze()
+
+// IShockable
+    // Interface for objects that can be electrified by the electric elemental effect
+    // Methods:
+        // Electrify()
+        // Deelectrify()
+
+// IKnockbackable
+    // Interface for objects that can be knocked back by the wind elemental effect
+    // Methods:
+        // Knockback(Vector2 direction, float force)
