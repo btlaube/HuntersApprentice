@@ -27,6 +27,7 @@ public class PlayerAttack : MonoBehaviour
         if (!input.inputEnabled) return;
         if (input == null)
             return;
+        if (!InventoryDataManager.Instance.currentInventoryData.unlockedUpgrades.Contains("melee")) return;
 
         HandleAttack();
     }

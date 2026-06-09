@@ -9,6 +9,8 @@ public class UIInputHandler : MonoBehaviour
     public event Action OnSubmit;
     public event Action OnCancel;
     public event Action OnPause;
+    public event Action OnInventory;
+    public event Action OnMap;
 
     private PlayerControls controls;
 
@@ -94,19 +96,22 @@ public class UIInputHandler : MonoBehaviour
         // GameManager.Instance.TogglePause();
         // GameManager.Instance.SwitchState(GameState.Paused);
         // Pauses game and opens settings menu. If already paused, unpauses and closes menu.
-        UIManager.Instance.OnPausePressed();
+        // UIManager.Instance.OnPausePressed();
+        OnPause?.Invoke();
     }
     public void ToggleInventory(InputAction.CallbackContext ctx)
     {
         // GameManager.Instance.SwitchState(GameState.Inventory);
         // Pauses game and opens inventory. If already open, unpauses and closes inventory.
-        UIManager.Instance.OnInventoryPressed();
+        // UIManager.Instance.OnInventoryPressed();
+        OnInventory?.Invoke();
     }
     public void ToggleMap(InputAction.CallbackContext ctx)
     {
         // GameManager.Instance.SwitchState(GameState.Map);
         // Pauses game and opens map. If already open, unpauses and closes map.
-        UIManager.Instance.OnMapPressed();
+        // UIManager.Instance.OnMapPressed();
+        OnMap?.Invoke();
     }
 
 }

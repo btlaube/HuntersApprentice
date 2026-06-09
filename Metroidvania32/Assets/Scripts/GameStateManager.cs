@@ -21,7 +21,6 @@ public enum GameState
 
 public class GameStateManager : MonoBehaviour
 {
-    public static GameStateManager Instance { get; private set; }
 
     public GameState CurrentState;// { get; private set; }
 
@@ -32,18 +31,29 @@ public class GameStateManager : MonoBehaviour
     public event Action<GameState> OnStateExited;
     public event Action<GameState, GameState> OnStateChanged;
 
-    private void Awake()
+    public static GameStateManager Instance { get; private set; }
+
+    void Awake()
     {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
         Instance = this;
     }
 
+
     public bool ChangeState(GameState newState)
     {
+        Debug.Log($"Requested state change to: {newState} from state {CurrentState}");
         if (newState == CurrentState)
             return false;
+        // Debug.Log($"Requested state change to: {newState}");
 
         if (!CanTransition(CurrentState, newState))
             return false;
+        // Debug.Log($"Requested state change to: {newState}");
 
         GameState previousState = CurrentState;
 
@@ -63,7 +73,8 @@ public class GameStateManager : MonoBehaviour
         switch (from)
         {
             case GameState.MainMenu:
-                return to == GameState.Gameplay;
+                return to == GameState.Gameplay ||
+                        to == GameState.Loading;
 
             case GameState.Gameplay:
                 return to == GameState.MainMenu ||
@@ -76,20 +87,20 @@ public class GameStateManager : MonoBehaviour
             case GameState.Menu:
                 return to == GameState.MainMenu ||
                         to == GameState.Gameplay ||
-                       to == GameState.Dialogue ||
-                       to == GameState.Cutscene ||
-                       to == GameState.Loading ||
-                       to == GameState.PlayerDead;
+                        to == GameState.Dialogue ||
+                        to == GameState.Cutscene ||
+                        to == GameState.Loading ||
+                        to == GameState.PlayerDead;
 
             case GameState.Dialogue:
                 return to == GameState.Gameplay ||
-                       to == GameState.PlayerDead;
+                        to == GameState.PlayerDead;
 
             case GameState.Cutscene:
                 return to == GameState.Gameplay ||
-                       to == GameState.Menu ||
-                       to == GameState.Loading ||
-                       to == GameState.PlayerDead;
+                        to == GameState.Menu ||
+                        to == GameState.Loading ||
+                        to == GameState.PlayerDead;
 
             case GameState.PlayerDead:
                 return to == GameState.Respawning;
@@ -97,11 +108,12 @@ public class GameStateManager : MonoBehaviour
             case GameState.Respawning:
                 return to == GameState.Gameplay;
             case GameState.Loading:
-                return to == GameState.Gameplay ||
-                       to == GameState.Menu ||
-                       to == GameState.Dialogue ||
-                       to == GameState.Cutscene ||
-                       to == GameState.PlayerDead;
+                return to == GameState.MainMenu ||
+                        to == GameState.Gameplay ||
+                        to == GameState.Menu ||
+                        to == GameState.Dialogue ||
+                        to == GameState.Cutscene ||
+                        to == GameState.PlayerDead;
         }
 
         return false;
@@ -109,12 +121,14 @@ public class GameStateManager : MonoBehaviour
 
     private void EnterState(GameState state)
     {
+        Debug.Log($"Entered state: {state}");
         switch (state)
         {
             case GameState.MainMenu:
-                UIStateManager.Instance.Open(UIState.MainMenu);
+                // UIStateManager.Instance.Open(UIState.MainMenu);
                 break;
             case GameState.Gameplay:
+                // UIStateManager.Instance.Open(UIState.Gameplay);
                 break;
 
             case GameState.Menu:

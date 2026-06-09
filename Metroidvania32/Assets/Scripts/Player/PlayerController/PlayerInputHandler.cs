@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using System;
 
 public class PlayerInputHandler : MonoBehaviour
 {
@@ -13,6 +14,7 @@ public class PlayerInputHandler : MonoBehaviour
 
     // public bool inputEnabled { get; private set; }
     public bool inputEnabled => GameStateManager.Instance.GameplayEnabled;
+    public event Action OnInteract;
 
     private PlayerControls controls;
 
@@ -93,6 +95,8 @@ public class PlayerInputHandler : MonoBehaviour
             controls.Player.Attack.performed -= OnAttackPerformed;
             controls.Player.Attack.canceled -= OnAttackCanceled;
 
+            controls.Player.Interact.performed -= OnInteractPressed;
+
             controls.Disable();
         }
 
@@ -111,6 +115,11 @@ public class PlayerInputHandler : MonoBehaviour
 
             controls.Player.Attack.performed += OnAttackPerformed;
             controls.Player.Attack.canceled += OnAttackCanceled;
+
+            controls.Player.Interact.performed += OnInteractPressed;
+            // controls.Player.Interact.started += ctx => Debug.Log("STARTED");
+            // controls.Player.Interact.performed += ctx => Debug.Log("PERFORMED");
+            // controls.Player.Interact.canceled += ctx => Debug.Log("CANCELED");
         }
     }
 
@@ -154,6 +163,12 @@ public class PlayerInputHandler : MonoBehaviour
     {
         // Attack input is handled in PlayerAttack via PlayerInputHandler reference
         isAttacking = false;
+    }
+
+    private void OnInteractPressed(InputAction.CallbackContext context)
+    {
+        Debug.Log("Interect press recieved");
+        OnInteract?.Invoke();
     }
 
     public void EnableInput()

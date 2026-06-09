@@ -22,8 +22,8 @@ public class MasterInputHandler : MonoBehaviour
         // DontDestroyOnLoad(gameObject);
         Controls = new PlayerControls();
         
-        playerInput = GetComponent<PlayerInputHandler>();
-        uiInput = GetComponent<UIInputHandler>();
+        playerInput = GetComponentInChildren<PlayerInputHandler>();
+        uiInput = GetComponentInChildren<UIInputHandler>();
     }
 
     void Start()

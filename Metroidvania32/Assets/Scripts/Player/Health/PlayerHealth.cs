@@ -4,7 +4,7 @@ using System;
 public class PlayerHealth : MonoBehaviour
 {
     [Header("References")]
-    [SerializeField] private PlayerStateManager playerStateManager;
+    // [SerializeField] private PlayerStateManager playerStateManager;
 
     public float currentHealth;
     public float maxHealth;
@@ -13,8 +13,8 @@ public class PlayerHealth : MonoBehaviour
 
     void Start()
     {
-        currentHealth = GameManager.Instance.playerStateManager.CurrentState.currentHealth;
-        maxHealth = GameManager.Instance.playerStateManager.CurrentState.maxHealth;
+        currentHealth = PlayerDataManager.Instance.Data.currentHealth;
+        maxHealth = PlayerDataManager.Instance.Data.maxHealth;
 
         // OnHealthChanged?.Invoke(currentHealth, maxHealth);
     }
@@ -25,7 +25,7 @@ public class PlayerHealth : MonoBehaviour
         // playerStateManager.CurrentState.currentHealth = currentHealth;
 
         // OnHealthChanged?.Invoke(currentHealth, maxHealth);
-        GameManager.Instance.playerStateManager.SetHealth(currentHealth);
+        PlayerDataManager.Instance.SetHealth(currentHealth);
 
         if (currentHealth <= 0)
         {
@@ -46,7 +46,7 @@ public class PlayerHealth : MonoBehaviour
         currentHealth = Mathf.Min(currentHealth, maxHealth);
         // playerStateManager.CurrentState.currentHealth = currentHealth;
         // OnHealthChanged?.Invoke(currentHealth, maxHealth);
-        GameManager.Instance.playerStateManager.SetHealth(currentHealth);
+        PlayerDataManager.Instance.SetHealth(currentHealth);
     }
 
 }

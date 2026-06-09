@@ -31,12 +31,21 @@ public class SceneContextManager : MonoBehaviour
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         CurrentContext = FindFirstObjectByType<SceneContext>();
+
+        if (CurrentContext == null) return;
+
+        ApplySceneContext(CurrentContext);
+    }
+
+    private void ApplySceneContext(SceneContext sceneContext)
+    {
         switch (CurrentContext.sceneType)
         {
             case SceneType.MainMenu:
                 // Handle Main Menu UI
                 Debug.Log("Main Menu Loaded");
                 GameStateManager.Instance.ChangeState(GameState.MainMenu);
+                // UIStateManager.Instance.Open(UIState.MainMenu);
                 break;
             case SceneType.Gameplay:
                 // Handle Gameplay UI

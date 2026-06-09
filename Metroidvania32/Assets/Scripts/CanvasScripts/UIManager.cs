@@ -11,7 +11,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private DialogueUI dialogueUI;
     [SerializeField] private MainMenuUI mainMenuUI;
     // [SerializeField] private JournalUI journalUI;
-    [SerializeField] private SettingsUI settingsUI;
+    [SerializeField] private OptionsUI settingsUI;
     [SerializeField] private SaveSelectUI saveSelectUI;
 
     // private UIInputHandler uiInput;
@@ -189,6 +189,11 @@ public class UIManager : MonoBehaviour
             && state != GameState.Respawning;
     }
 
+    public void OpenMainMenu()
+    {
+        mainMenuUI.Show();
+    }
+
     public void OpenPause()
     {
         pauseUI.Show();
@@ -219,6 +224,16 @@ public class UIManager : MonoBehaviour
         saveSelectUI.Show();
     }
 
+    public void OpenHUD()
+    {
+        hudManager.Show();
+    }
+
+    public void CloseAllMenus()
+    {
+        CloseMainMenu();
+    }
+
     public void ClosePause()
     {
         pauseUI.Hide();
@@ -247,6 +262,16 @@ public class UIManager : MonoBehaviour
     public void CloseSaveSelect()
     {
         saveSelectUI.Hide();
+    }
+
+    public void CloseMainMenu()
+    {
+        mainMenuUI.Hide();
+    }
+
+    public void CloseHUD()
+    {
+        hudManager.Hide();
     }
 
 }

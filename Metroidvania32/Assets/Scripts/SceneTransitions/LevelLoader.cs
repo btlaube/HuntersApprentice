@@ -5,15 +5,15 @@ using UnityEngine.SceneManagement;
 
 public class LevelLoader : MonoBehaviour
 {
-    public static LevelLoader instance;
+    public static LevelLoader Instance;
     public Animator transition;
     // public CanvasGroupScript canvasGroup;
 
     [SerializeField] private float transitionTime = 1f;
 
     void Awake() {
-        if (instance == null) {
-            instance = this;
+        if (Instance == null) {
+            Instance = this;
         }
         else {
             Destroy(gameObject);
@@ -26,6 +26,22 @@ public class LevelLoader : MonoBehaviour
     public void ResetScene()
     {
         LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
+    public IEnumerator LoadSceneAsync(string sceneToLoad)
+    {
+        transition.SetTrigger("Start");
+
+        yield return new WaitForSeconds(transitionTime);
+
+        SceneManager.LoadSceneAsync(sceneToLoad);
+
+        transition.SetTrigger("End");
+    }
+
+    public void LoadNextScene()
+    {
+        LoadScene(SpawnManager.Instance.SpawnData.sceneName);
     }
 
     public void LoadScene(int sceneToLoad) {

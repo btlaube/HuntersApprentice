@@ -6,5 +6,6 @@ public class PlayerSaveData
     public float moveSpeed;
 
     // public Vector3 position;
+    public int currency;
     public SpawnPointData spawnPointData;
 }

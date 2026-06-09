@@ -10,4 +10,5 @@ public enum SceneType
 public class SceneContext : MonoBehaviour
 {
     public SceneType sceneType;
+    
 }

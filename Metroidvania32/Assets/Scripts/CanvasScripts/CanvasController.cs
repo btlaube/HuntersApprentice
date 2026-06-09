@@ -1,7 +1,10 @@
 using UnityEngine;
+using System.Collections;
+using UnityEngine.EventSystems;
 
 public abstract class CanvasController : MonoBehaviour
 {
+    [SerializeField] private GameObject firstSelected;
     public virtual void SetVisible(bool visible)
     {
         if (visible)
@@ -19,4 +22,16 @@ public abstract class CanvasController : MonoBehaviour
     {
         gameObject.SetActive(false);
     }
+
+    public virtual void SetFirstSelected()
+    {
+        StartCoroutine(SetFirstSelectedWithDelay(firstSelected));
+    }
+
+    public virtual IEnumerator SetFirstSelectedWithDelay(GameObject obj)
+    {
+        yield return new WaitForEndOfFrame();
+        EventSystem.current.SetSelectedGameObject(obj);
+    }
+
 }

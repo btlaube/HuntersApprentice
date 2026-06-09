@@ -3,9 +3,9 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     [Header("References")]
-    [SerializeField] private PlayerInputHandler input;
-    [SerializeField] private PlayerVelocity velocity;
     [SerializeField] private PlayerComponents components;
+    private PlayerInputHandler input;
+    private PlayerVelocity velocity;
 
     [Header("Movement Parameters")]
     [SerializeField] private float moveSpeed = 8f;
@@ -27,10 +27,11 @@ public class PlayerMovement : MonoBehaviour
 
     void Start()
     {
-        input = MasterInputHandler.Instance.playerInput;
+        // input = MasterInputHandler.Instance.playerInput;
+        input = components.playerInput;
         input.EnableInput();
         // Debug.Log(input.horizontalInput);
-        // velocity = components.velocity;
+        velocity = components.playerVelocity;
         // HandleHorizontalMovement();
     }
 
@@ -44,6 +45,7 @@ public class PlayerMovement : MonoBehaviour
         if (input == null || velocity == null)
             return;
 
+        // if(components.stateManager.CurrentState is RunningState)
         HandleHorizontalMovement();
     }
 
@@ -89,6 +91,8 @@ public class PlayerMovement : MonoBehaviour
             into PlayerVelocity.
         */
         velocity.SetHorizontalSpeed(currentHorizontalSpeed);
+        // components.playerAnimator.SetSpeed(currentHorizontalSpeed);
+
 
         // Handle facing direction based on movement input.
         if (!facingLocked)

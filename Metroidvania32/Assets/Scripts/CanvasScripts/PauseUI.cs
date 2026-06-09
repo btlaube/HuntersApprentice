@@ -2,15 +2,32 @@ using UnityEngine;
 
 public class PauseUI : CanvasController
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    [SerializeField] private GameplayUIManager gameplayUIManager;
+    [SerializeField] private GameObject confirmQuitPanel;
+
     void Start()
     {
-        
+        HideConfirmQuitPanel();
     }
 
-    // Update is called once per frame
-    void Update()
+    public void ShowConfirmQuitPanel()
     {
-        
+        confirmQuitPanel.SetActive(true);
     }
+
+    public void HideConfirmQuitPanel()
+    {
+        confirmQuitPanel.SetActive(false);
+    }
+
+    public void OnSaveAndQuit()
+    {
+        ShowConfirmQuitPanel();
+    }
+
+    public void OnQuitConfirmed()
+    {
+        GameManager.Instance.OnSaveAndExit();
+    }
+
 }

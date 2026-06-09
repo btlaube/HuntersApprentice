@@ -2,15 +2,7 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    [SerializeField] private BaseGameData baseData;
-
-    [SerializeField] private SaveManager saveManager;
-    public PlayerStateManager playerStateManager;
-    public WorldStateManager worldStateManager;
-    public UIManager uiManager;
     
-    // public bool GamePlayEnabled => currentState == GameState.GamePlay;
-
     public static GameManager Instance { get; private set; }
 
     void Awake()
@@ -21,96 +13,106 @@ public class GameManager : MonoBehaviour
             return;
         }
         Instance = this;
-        // DontDestroyOnLoad(gameObject);
     }
 
-    void Start()
+    public void OnBootSequence()
     {
-        // UIManager.Instance.InitializeUIManagers();
-        // currentState = GameState.MainMenu;
+        // Tell GameStateManager to change to loading state
+        GameStateManager.Instance.ChangeState(GameState.Loading);
+        // Tell LevelLoader to load the "MainMenu" scene
+        LevelLoader.Instance.LoadScene("MainMenu");
+    }
+
+    public void OnNewGame()
+    {
+        int slot = SaveManager.Instance.CreateNewSave();
+        SaveManager.Instance.LoadGame(slot);
+        // Tell GameDataManager to initialize Sub Managers with base game data
+        // GameDataManager.Instance.InitializeNewRun();
+        // // Get newly loaded base data from GameDataManager
+        // // GameData gameData = GameDataManager.Instance.GetGameData();
+        // // Tell SaveManager to save the new data
+        // SaveManager.Instance.SaveGame();
+        // // Save the first checkpoint, setting checkpointSnapshot.currency to 0
+        CheckpointManager.Instance.SaveCheckpoint();
+        // // Tell SpawnManager to update the Player Spawn Location
+        SpawnManager.Instance.SetSpawnLocation(PlayerDataManager.Instance.Data.spawnPointData);
+        // // Tell GameStateManager to change to loading state
+        GameStateManager.Instance.ChangeState(GameState.Loading);
+        // // Tell LevelLoader to load the current spawn location in SpawnManager
+        LevelLoader.Instance.LoadNextScene();
+    }
+
+    public void OnLoadGame(int slot)
+    {
+        // Get saveData from the SaveManager, which deserializes data
+        // SaveData saveData = SaveManager.Instance.LoadGame(slot);
+        // Tell GameDataManager to update current data based on loaded data
+        // GameDataManager.Instance.SetGameData(saveData);
+        SaveManager.Instance.LoadGame(slot);
+        // Tell CheckpointManager to set the current checkpoint snapshot currency to loaded currency amount
+        CheckpointManager.Instance.SaveCheckpoint();
+        // Tell SpawnManager to update the Player Spawn Location
+        SpawnManager.Instance.SetSpawnLocation(PlayerDataManager.Instance.Data.spawnPointData);
+        // Tell GameStateManager to change to loading state
+        GameStateManager.Instance.ChangeState(GameState.Loading);
+        // Tell LevelLoader to load the current spawn location in SpawnManager
+        LevelLoader.Instance.LoadNextScene();
+    }
+
+    public void OnSaveAndExit()
+    {
+        SaveGame();
+        // Tell GameStateManager to change to loading state
+        GameStateManager.Instance.ChangeState(GameState.Loading);
+        // Tell LevelLoader to load the "MainMenu" scene
+        LevelLoader.Instance.LoadScene("MainMenu");
     }
 
     public void SaveGame()
     {
-        SaveData saveData = new SaveData
-        {
-            player = playerStateManager.GetSaveData(),
-            world = worldStateManager.GetSaveData()
-        };
-
-        saveManager.SaveGame(saveData);
+        // Get data from GameDataManager
+        // SaveData gameData = GameDataManager.Instance.GetGameData();
+        // // Tell SaveManager to save the retreived data
+        SaveManager.Instance.SaveGame();
     }
 
-    public void LoadGame()
+    public void OnPlayerDeath(Vector2 playerDeathPosition)
     {
-        SaveData saveData = saveManager.LoadGame();
-
-        if (saveData == null)
-            return;
-
-        playerStateManager.ApplySaveData(saveData.player);
-        worldStateManager.ApplySaveData(saveData.world);
-        //TODO: Add Inventory, Map, and other Managers as needed
+        // Tell CheckpointManager to reset player currency to checkpoint state and spawn checkpointObject
+        CheckpointManager.Instance.OnPlayerDeath(playerDeathPosition);
+        // Tell GameStateManager to change to playerDead state
+        GameStateManager.Instance.ChangeState(GameState.PlayerDead);
+        // Tell SpawnManager to update the Player Spawn Location from the spawn data in PlayerDataManager which is updated on NewGame, LoadGame, and when interacting with SavePoints
+        SpawnManager.Instance.SetSpawnLocation(PlayerDataManager.Instance.Data.spawnPointData);
+        // Tell GameStateManager to change to loading state
+        GameStateManager.Instance.ChangeState(GameState.Loading);
+        // Tell LevelLoader to load the current spawn location in SpawnManager
+        LevelLoader.Instance.LoadNextScene();
     }
 
-    public void NewGame()
+    public void OnSceneTransitionTrigger(SpawnPointData spawnData)
     {
-        playerStateManager.InitializeNewRun(baseData);
-        worldStateManager.InitializeNewRun(baseData);
+        // Tell SpawnManager to set the current spawn location to the spawn data from the transition trigger
+        SpawnManager.Instance.SetSpawnLocation(spawnData);
+        // Tell GameStateManager to change to loading state
+        GameStateManager.Instance.ChangeState(GameState.Loading);
+        // Tell LevelLoader to load the current spawn location in SpawnManager
+        LevelLoader.Instance.LoadNextScene();
+    }
 
+    public void OnSavePoint(SpawnPointData spawnData)
+    {
+        // Fully heal the player
+        PlayerDataManager.Instance.SetHealth(PlayerDataManager.Instance.Data.maxHealth);
+        // Tell CheckpointManager to update checkpoint snapshot (overwriting previous checkpoint)
+        CheckpointManager.Instance.SaveCheckpoint();
+        // Tell the PlayerDataManager to update the saved player spawn data
+        PlayerDataManager.Instance.Data.spawnPointData = spawnData;
+        // Tell the spawn manager to update the current spawn data
+        SpawnManager.Instance.SetSpawnLocation(spawnData);
+        // Save current game data to disk
         SaveGame();
-        SaveCheckpoint();
-        SceneLoadPlayerSpawner.instance.UpdatePlayerSpawnPointAndLoadScene(playerStateManager.CurrentState.spawnPointData);
     }
-
-
-
-    // TODO: Add code for saving and loading checkpoints
-    // public void ActivateCheckpoint(SpawnPointData spawnData)
-    // {
-            // SceneTransitionManager.SceneLoadPlayerSpawner.UpdatePlayerSpawnPoint(spawnData);
-            // RunManager.Instance.SaveCheckpoint();
-            
-    // }
-
-    // TODO: Subscribe to player death event
-    // Load checkpoint in RunManager
-
-    public void SaveCheckpoint()
-    {
-        playerStateManager.SaveCheckpointState();
-        // worldStateManager.SaveCheckpointState();
-    }
-
-    public void Respawn()
-    {
-        playerStateManager.RestoreCheckpointState();
-        // worldStateManager.RestoreCheckpointState();
-        LevelLoader.instance.LoadScene(playerStateManager.CurrentState.spawnPointData.sceneName);
-    }
-
-    // public void SwitchState(GameState newState)
-    // {
-    //     currentState = newState;
-    //     // uiManager.ApplySceneUI(newState);
-    // }
-
-    // private bool isPaused;
-    // public void ToggleSettings()
-    // {
-    //     // pause and open settings menu or unpause and close settings menu
-    //     if (isPaused)
-    //     {
-    //         // close settings menu and unpause
-    //         isPaused = false;
-    //         UIManager.Instance.ToggleSettings();
-    //     }
-    //     else
-    //     {
-    //         // open settings menu and pause
-    //         isPaused = true;
-    //     }
-
-    // }
 
 }

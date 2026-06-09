@@ -6,7 +6,7 @@ public enum UIState
     MainMenu,
     SaveSelect,
     Controls,
-
+    Gameplay,
     Settings,
     Pause,
     Inventory,
@@ -64,6 +64,17 @@ public class UIStateManager : MonoBehaviour
         // activate panel
         switch (state)
         {
+            case UIState.None:
+                UIManager.Instance.CloseAllMenus();
+                break;
+            case UIState.MainMenu:
+                // Activate MainMenuUI
+                UIManager.Instance.OpenMainMenu();
+                break;
+            case UIState.Gameplay:
+                UIManager.Instance.CloseMainMenu();
+                UIManager.Instance.OpenHUD();
+                break;
             case UIState.Settings:
                 // Activate Settings Panel
                 UIManager.Instance.OpenSettings();

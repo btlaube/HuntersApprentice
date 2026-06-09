@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1944d5639e3359949aeb508ccd9722d7, type: 3}
   m_Name: BaseGameData
   m_EditorClassIdentifier: Assembly-CSharp::BaseGameData
-  playerBaseData: {fileID: 11400000, guid: 57c8a5f1df54dac468d3ee12f3d82b97, type: 2}
-  worldBaseData: {fileID: 11400000, guid: 00740c51c7b1ac24f801ae661b258a3e, type: 2}
+  basePlayerData: {fileID: 11400000, guid: c94016f9221055d4ca40fabbc3ea4477, type: 2}
+  baseWorldData: {fileID: 11400000, guid: 4e52af16dee53a8498ed820ba45bf036, type: 2}

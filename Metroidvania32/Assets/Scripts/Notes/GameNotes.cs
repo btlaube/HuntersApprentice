@@ -30,6 +30,7 @@
     // {
         // GameManager.Initialize()
         // UIManager.Initialize()
+        // GameStateManager.Initialize()
         // Etc.
         // Load Main menu scene
     // }
@@ -60,10 +61,11 @@
         // Gameplay
         // Cutscene
 
-// PlayerRuntimeDataManager
-    // PlayerRuntimeData
+// CheckpointManager
+    // CheckpointData
         // PlayerHealth
         // PlayerCurrency
+        // PlayerSpawnData
     // public void SaveCheckpoint()
     // public void RestoreCheckpoint()
 
