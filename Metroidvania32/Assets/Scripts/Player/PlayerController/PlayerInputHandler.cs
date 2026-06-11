@@ -11,10 +11,16 @@ public class PlayerInputHandler : MonoBehaviour
     public bool isJumping { get; private set; }
     // public bool jumpPressed;// { get; private set; }
     public bool isAttacking { get; private set; }
+    public bool isMeleeAttacking { get; private set; }
+    public bool isRangedAttacking { get; private set; }
+    public bool isDashing { get; private set; }
 
     // public bool inputEnabled { get; private set; }
     public bool inputEnabled => GameStateManager.Instance.GameplayEnabled;
     public event Action OnInteract;
+    public event Action OnMelee;
+    public event Action OnRanged;
+    // public event Action OnDash;
 
     private PlayerControls controls;
 
@@ -92,10 +98,18 @@ public class PlayerInputHandler : MonoBehaviour
             controls.Player.Jump.performed -= OnJumpPerformed;
             controls.Player.Jump.canceled -= OnJumpCanceled;
 
-            controls.Player.Attack.performed -= OnAttackPerformed;
-            controls.Player.Attack.canceled -= OnAttackCanceled;
+            // controls.Player.Attack.performed -= OnAttackPerformed;
+            // controls.Player.Attack.canceled -= OnAttackCanceled;
+            controls.Player.Melee.performed -= OnMeleePerformed;
+            controls.Player.Melee.canceled -= OnMeleeCanceled;
+
+            controls.Player.Ranged.performed -= OnRangedPerformed;
+            controls.Player.Ranged.canceled -= OnRangedCanceled;
 
             controls.Player.Interact.performed -= OnInteractPressed;
+            
+            controls.Player.Dash.performed -= OnDashPerformed;
+            controls.Player.Dash.canceled -= OnDashCanceled;
 
             controls.Disable();
         }
@@ -113,10 +127,18 @@ public class PlayerInputHandler : MonoBehaviour
             controls.Player.Jump.performed += OnJumpPerformed;
             controls.Player.Jump.canceled += OnJumpCanceled;
 
-            controls.Player.Attack.performed += OnAttackPerformed;
-            controls.Player.Attack.canceled += OnAttackCanceled;
+            // controls.Player.Attack.performed += OnAttackPerformed;
+            // controls.Player.Attack.canceled += OnAttackCanceled;
+            controls.Player.Melee.performed += OnMeleePerformed;
+            controls.Player.Melee.canceled += OnMeleeCanceled;
+
+            controls.Player.Ranged.performed += OnRangedPerformed;
+            controls.Player.Ranged.canceled += OnRangedCanceled;
 
             controls.Player.Interact.performed += OnInteractPressed;
+
+            controls.Player.Dash.performed += OnDashPerformed;
+            controls.Player.Dash.canceled += OnDashCanceled;
             // controls.Player.Interact.started += ctx => Debug.Log("STARTED");
             // controls.Player.Interact.performed += ctx => Debug.Log("PERFORMED");
             // controls.Player.Interact.canceled += ctx => Debug.Log("CANCELED");
@@ -163,6 +185,41 @@ public class PlayerInputHandler : MonoBehaviour
     {
         // Attack input is handled in PlayerAttack via PlayerInputHandler reference
         isAttacking = false;
+    }
+
+    private void OnMeleePerformed(InputAction.CallbackContext contect)
+    {
+        // OnMelee?.Invoke();
+        isMeleeAttacking = true;
+    }
+
+    private void OnMeleeCanceled(InputAction.CallbackContext contect)
+    {
+        // OnMelee?.Invoke();
+        isMeleeAttacking = false;
+    }
+
+    private void OnRangedPerformed(InputAction.CallbackContext contect)
+    {
+        // OnRanged?.Invoke();
+        isRangedAttacking = true;
+    }
+
+    private void OnRangedCanceled(InputAction.CallbackContext contect)
+    {
+        // OnRanged?.Invoke();
+        isRangedAttacking = false;
+    }
+
+    private void OnDashPerformed(InputAction.CallbackContext contect)
+    {
+        // OnDash?.Invoke();
+        isDashing = true;
+    }
+
+    private void OnDashCanceled(InputAction.CallbackContext contect)
+    {
+        isDashing = false;
     }
 
     private void OnInteractPressed(InputAction.CallbackContext context)

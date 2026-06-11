@@ -7,11 +7,13 @@ public class PlayerGravity : MonoBehaviour
     [SerializeField] private PlayerComponents components;
     [SerializeField] private PlayerCollision collision;
     [SerializeField] private PlayerInputHandler input;
-    [SerializeField] private JumpController jumpController;
+    // [SerializeField] private JumpController jumpController;
+
+    [SerializeField] private float defaultGravity;
 
     void Start()
     {
-        velocity.SetGravityVelocity(new Vector2(0f, -20.0f));
+        velocity.SetGravityVelocity(new Vector2(0f, defaultGravity));
     }
 
     void Update()
@@ -27,4 +29,16 @@ public class PlayerGravity : MonoBehaviour
         //     velocity.SetGravityVelocity(new Vector2(0f, -20.0f));
         // }
     }
+
+
+    public void EnableGravity()
+    {
+        velocity.SetGravityVelocity(new Vector2(0f, defaultGravity));
+    }
+
+    public void DisableGravity()
+    {
+        velocity.SetGravityVelocity(new Vector2(0f, 0.0f));
+    }
+
 }

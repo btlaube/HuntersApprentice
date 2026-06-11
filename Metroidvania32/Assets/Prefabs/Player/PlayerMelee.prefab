@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 5354119043052799405}
   - component: {fileID: 8556262723805333728}
   - component: {fileID: 7352316306814841275}
-  m_Layer: 7
+  m_Layer: 10
   m_Name: PlayerMelee
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -84,7 +84,7 @@ SpriteRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
-  m_Color: {r: 1, g: 0.25895607, b: 0, a: 1}
+  m_Color: {r: 1, g: 0.25895607, b: 0, a: 0.0627451}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -152,3 +152,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerAttackCollider
   damageAmount: 1
+  elementID: 

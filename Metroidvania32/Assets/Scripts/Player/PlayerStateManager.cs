@@ -14,13 +14,17 @@ public class PlayerStateManager : MonoBehaviour
     void Awake()
     {
         input = MasterInputHandler.Instance.playerInput;
+    }
 
+    void Start()
+    {
         // Initial state
         SetState(new IdleState(playerComponents));
     }
 
     void FixedUpdate()
     {
+        CurrentState.Update();
         HandleStateTransitions();
     }
 
@@ -29,11 +33,11 @@ public class PlayerStateManager : MonoBehaviour
         if (CurrentState is IdleState)
         {
             // Transition from Idle to Running
-            if (Mathf.Abs(input.horizontalInput.x) > 0.1f)
+            if (playerComponents.playerMovement.ShouldRun())
             {
                 SwitchState(new RunningState(playerComponents));
             }
-            else if (playerComponents.playerInput.isJumping && playerComponents.playerJump.ShouldJump())// && playerComponents.playerJump.currentJumps < playerComponents.playerJump.maxJumps)
+            else if (playerComponents.playerJump.ShouldStartJump())
             {
                 SwitchState(new JumpingState(playerComponents));
             }
@@ -41,11 +45,15 @@ public class PlayerStateManager : MonoBehaviour
             {
                 SwitchState(new FallingState(playerComponents));
             }
+            else if (playerComponents.playerDash.ShouldStartDash())
+            {
+                SwitchState(new DashingState(playerComponents));
+            }
         }
         else if (CurrentState is RunningState)
         {
             // Transition from Running to Idle
-            if (Mathf.Abs(input.horizontalInput.x) < 0.1f)
+            if (playerComponents.playerMovement.ShouldIdle())
             {
                 SwitchState(new IdleState(playerComponents));
             }
@@ -53,11 +61,15 @@ public class PlayerStateManager : MonoBehaviour
             {
                 SwitchState(new FallingState(playerComponents));
             }
-            // // Transition from Running to Jumping
-            // else if (shouldJump && currentJumps < maxJumps)
-            // {
-            //     SwitchState(new JumpingState(this));
-            // }
+            // Transition from Running to Jumping
+            else if (playerComponents.playerJump.ShouldStartJump())
+            {
+                SwitchState(new JumpingState(playerComponents));
+            }
+            else if (playerComponents.playerDash.ShouldStartDash())
+            {
+                SwitchState(new DashingState(playerComponents));
+            }
         }
         else if (CurrentState is FallingState)
         {
@@ -66,14 +78,18 @@ public class PlayerStateManager : MonoBehaviour
             {
                 SwitchState(new IdleState(playerComponents));
             }
-            // else if (shouldJump && currentJumps < maxJumps && hasDoubleJump)
-            // {
-            //     SwitchState(new JumpingState(playerComponents));
-            // }
+            else if (playerComponents.playerJump.ShouldStartJump())
+            {
+                SwitchState(new JumpingState(playerComponents));
+            }
             // else if (PlayerIsOnWall() && hasWallCling)
             // {
             //     SwitchState(new WallClingingState(playerComponents));
             // }
+            else if (playerComponents.playerDash.ShouldStartDash())
+            {
+                SwitchState(new DashingState(playerComponents));
+            }
         }
         // else if (CurrentState is WallClingingState)
         // {
@@ -95,7 +111,7 @@ public class PlayerStateManager : MonoBehaviour
         else if (CurrentState is JumpingState)
         {
             // Transition from Jumping
-            if (playerComponents.playerJump.JumpEnded())
+            if (playerComponents.playerJump.ShouldFall())
             {
                 SwitchState(new FallingState(playerComponents));
             }
@@ -103,9 +119,9 @@ public class PlayerStateManager : MonoBehaviour
             // {
             //     SwitchState(new WallClingingState(this));
             // }
-            if (playerComponents.playerCollision.hitCeiling)
+            else if (playerComponents.playerDash.ShouldStartDash())
             {
-                SwitchState(new FallingState(playerComponents));
+                SwitchState(new DashingState(playerComponents));
             }
         }
         // else if (CurrentState is WallJumpingState)
@@ -120,6 +136,13 @@ public class PlayerStateManager : MonoBehaviour
         //         SwitchState(new WallClingingState(this));
         //     }
         // }
+        else if (CurrentState is DashingState)
+        {
+            if (playerComponents.playerDash.ShouldEndDash())
+            {
+                SwitchState(new IdleState(playerComponents));
+            }
+        }
     }
 
     public void SetState(PlayerState newState)

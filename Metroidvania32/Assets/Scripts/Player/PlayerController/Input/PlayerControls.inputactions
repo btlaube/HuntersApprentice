@@ -88,7 +88,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "MeleeAttack",
+                    "name": "Melee",
                     "type": "Button",
                     "id": "d2d066d3-3617-4410-b37c-e1644939debe",
                     "expectedControlType": "",
@@ -106,7 +106,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "RangedAttack",
+                    "name": "Ranged",
                     "type": "Button",
                     "id": "6d626f73-16e1-44b8-9538-c85376ecba24",
                     "expectedControlType": "",
@@ -558,12 +558,34 @@
                 },
                 {
                     "name": "",
+                    "id": "621fdb0d-e5bb-4c0c-b1aa-8169682e15da",
+                    "path": "<Gamepad>/rightTrigger",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Dash",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "cd790cd8-b400-47bd-872c-41f69354cd48",
                     "path": "<Keyboard>/x",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "MeleeAttack",
+                    "action": "Melee",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "e01ec340-6629-447e-a434-69d9e54622d9",
+                    "path": "<Gamepad>/buttonWest",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Melee",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -574,7 +596,18 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "RangedAttack",
+                    "action": "Ranged",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "96694492-37c7-4bbe-af63-91a773dd27b0",
+                    "path": "<Gamepad>/buttonEast",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Ranged",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
@@ -696,6 +729,15 @@
                     "name": "Map",
                     "type": "Button",
                     "id": "54119d1a-8228-488c-a7a1-6232f7ae761c",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "QuickMap",
+                    "type": "Button",
+                    "id": "bc8266bb-baea-4365-8da0-00317e2ffcd7",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -1145,8 +1187,30 @@
                 },
                 {
                     "name": "",
+                    "id": "e61da0fe-9536-45ef-a2a8-53fb137fb8c4",
+                    "path": "<Gamepad>/select",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Pause",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "ef1efa3c-1093-4af9-9510-10f1997e23f7",
                     "path": "<Keyboard>/i",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Inventory",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "3299e60a-8550-40da-9748-2100c1ec9e65",
+                    "path": "<Gamepad>/start",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -1162,6 +1226,28 @@
                     "processors": "",
                     "groups": "",
                     "action": "Map",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "bf472df3-3c2e-4cc6-a3d4-2bb0b9bcfe42",
+                    "path": "<Gamepad>/leftShoulder",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "QuickMap",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "1e642e07-ed1a-4e40-af43-99fa64db3375",
+                    "path": "<Keyboard>/tab",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "QuickMap",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

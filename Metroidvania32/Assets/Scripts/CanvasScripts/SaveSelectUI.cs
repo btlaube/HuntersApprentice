@@ -17,13 +17,13 @@ public class SaveSelectUI : CanvasController
     public override void Show()
     {
         base.Show();
-        // InitializeSaveSelect();
-    }
-
-    void Start()
-    {
         InitializeSaveSelect();
     }
+
+    // void Start()
+    // {
+    //     InitializeSaveSelect();
+    // }
 
     public void InitializeSaveSelect()
     {
@@ -61,6 +61,7 @@ public class SaveSelectUI : CanvasController
     {
         List<Metadata> saves =
             SaveManager.Instance.GetAllMetadata();
+        if (saves == null) return;
 
         foreach (Metadata metadata in saves)
         {

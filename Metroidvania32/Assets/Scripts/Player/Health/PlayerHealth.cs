@@ -10,9 +10,11 @@ public class PlayerHealth : MonoBehaviour
     public float maxHealth;
 
     // public event Action<float, float> OnHealthChanged;
+    private bool isInvincible;
 
     void Start()
     {
+        isInvincible = false;
         currentHealth = PlayerDataManager.Instance.Data.currentHealth;
         maxHealth = PlayerDataManager.Instance.Data.maxHealth;
 
@@ -21,6 +23,7 @@ public class PlayerHealth : MonoBehaviour
 
     public void TakeDamage(float damage)
     {
+        if (isInvincible) return;
         currentHealth -= damage;
         // playerStateManager.CurrentState.currentHealth = currentHealth;
 
@@ -48,5 +51,16 @@ public class PlayerHealth : MonoBehaviour
         // OnHealthChanged?.Invoke(currentHealth, maxHealth);
         PlayerDataManager.Instance.SetHealth(currentHealth);
     }
+
+    public void DisableDamage()
+    {
+        isInvincible = true;
+    }
+
+    public void EnableDamage()
+    {
+        isInvincible = false;        
+    }
+
 
 }

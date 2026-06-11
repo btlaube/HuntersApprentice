@@ -6,6 +6,8 @@ public class PlayerAttackCollider : MonoBehaviour
     [SerializeField] private float damageAmount = 1f;
 
     private HashSet<IDamageable> hitTargets = new();
+    private HashSet<IEffectable> effectedTargets = new();
+    public string elementID;
 
     private void OnEnable()
     {
@@ -21,5 +23,19 @@ public class PlayerAttackCollider : MonoBehaviour
             hitTargets.Add(damageable);
             damageable.TakeDamage(damageAmount);
         }
+
+        IEffectable effectable = other.GetComponent<IEffectable>();
+
+        if (effectable != null && !effectedTargets.Contains(effectable))
+        {
+            effectedTargets.Add(effectable);
+            effectable.ApplyEffect(elementID);
+        }
     }
+
+    public void SetAttackElement(string element)
+    {
+        elementID = element;
+    }
+
 }

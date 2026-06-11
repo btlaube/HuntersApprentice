@@ -8,7 +8,7 @@ public abstract class CollectableWorldItem : MonoBehaviour, IInteractable
     void Start()
     {
         HideInteractIcon();
-        // if (WorldDataManager.currentWorldData.collectedItems.Contains(flagID)) Destroy(gameObject);
+        if (WorldDataManager.Instance.currentWorldData.collectedItems.Contains(flagID)) Destroy(gameObject);
     }
 
 

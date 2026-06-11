@@ -6,15 +6,11 @@ using UnityEngine;
 #region PlayerState
 public abstract class PlayerState
 {
-    protected PlayerMovement playerMovement;
-    protected Animator playerAnimator;
-    protected AudioHandler playerAudio;
+    protected PlayerComponents components;
 
-    protected PlayerState(PlayerComponents components)
+    protected PlayerState(PlayerComponents playerComponents)
     {
-        playerMovement = components.playerMovement;
-        playerAnimator = components.animator;
-        playerAudio = components.audioHandler;
+        components = playerComponents;
     }
 
     public abstract void Enter();
@@ -26,12 +22,14 @@ public abstract class PlayerState
 #region IdleState
 public class IdleState : PlayerState
 {
-    public IdleState(PlayerComponents controller) : base(controller) {}
+    public IdleState(PlayerComponents components) : base(components) {}
 
     public override void Enter()
     {
         // Debug.Log("Enter Idle");
         // playerMovement.currentJumps = 0;
+        components.animator.SetFloat("Speed", 0.0f);
+        components.playerMovement.StopMovement();
     }
 
     public override void Update()
@@ -49,23 +47,26 @@ public class IdleState : PlayerState
 #region RunningState
 public class RunningState : PlayerState
 {
-    public RunningState(PlayerComponents controller) : base(controller) {}
+    public RunningState(PlayerComponents components) : base(components) {}
 
     public override void Enter()
     {
         // Debug.Log("Enter Running");
+        // components.playerMovement.StartMovement();
     }
 
     public override void Update()
     {
-        // Debug.Log("Running");
-        // playerAnimator.SetFloat("Speed", Mathf.Abs(playerMovement.rb.velocity.x));
+        Debug.Log("Running");
+        components.animator.SetFloat("Speed", Mathf.Abs(components.playerVelocity.GetMovementVelocity().x));
+        Debug.Log($"Set animator speed to {Mathf.Abs(components.playerVelocity.GetMovementVelocity().x)}");
+        components.playerMovement.MovementUpdate();
     }
 
     public override void Exit()
     {
         // Debug.Log("Exit Running");
-        playerMovement.StopMovement();
+        components.playerMovement.StopMovement();
     }
 }
 #endregion
@@ -73,11 +74,11 @@ public class RunningState : PlayerState
 #region FallingState
 public class FallingState : PlayerState
 {
-    public FallingState(PlayerComponents controller) : base(controller) {}
+    public FallingState(PlayerComponents components) : base(components) {}
 
     public override void Enter()
     {
-        // playerAnimator.SetBool("IsFalling", true);
+        components.animator.SetBool("IsFalling", true);
         // Debug.Log("Enter Falling");
         // playerMovement.rb.gravityScale = playerMovement.regGravityScale;
 
@@ -96,6 +97,8 @@ public class FallingState : PlayerState
     public override void Update()
     {
         // Debug.Log("Falling");
+        components.playerMovement.MovementUpdate();
+        // components.playerJump.UpdateJumpInput();
         // playerMovement.CancelInputOnWall();
         // // Player has crossed into actual falling
         // if (playerMovement.rb.velocity.y <= 0)
@@ -106,8 +109,9 @@ public class FallingState : PlayerState
 
     public override void Exit()
     {
-        // playerAnimator.SetBool("IsFalling", false);
+        components.animator.SetBool("IsFalling", false);
         // Debug.Log("Exit Falling");
+        // components.playerMovement.StopMovement();
     }
 }
 #endregion
@@ -115,7 +119,7 @@ public class FallingState : PlayerState
 #region WallClingState
 public class WallClingingState : PlayerState
 {
-    public WallClingingState(PlayerComponents controller) : base(controller) {}
+    public WallClingingState(PlayerComponents components) : base(components) {}
 
     public override void Enter()
     {
@@ -156,28 +160,32 @@ public class WallClingingState : PlayerState
 #region JumpingState
 public class JumpingState : PlayerState
 {
-    public JumpingState(PlayerComponents controller) : base(controller) {}
+    public JumpingState(PlayerComponents components) : base(components) {}
 
     public override void Enter()
     {
         // Debug.Log("Enter Jumping");
-        // playerAnimator.SetBool("IsJumping", true);
+        components.animator.SetBool("IsJumping", true);
         // playerAudio.Play("Jump");
         // playerMovement.jumpParticles.Play();
         // playerMovement.Jump();
+        components.playerJump.StartJump();
     }
 
     public override void Update()
     {
         // Debug.Log("Jumping");
         // playerMovement.JumpUpdate();
+        components.playerJump.JumpUpdate();
+        components.playerMovement.MovementUpdate();
     }
 
     public override void Exit()
     {
         // Debug.Log("Exit Jumping");
-        // playerAnimator.SetBool("IsJumping", false);
-        // playerMovement.EndJump();
+        components.animator.SetBool("IsJumping", false);
+        components.playerJump.EndJump();
+        // components.playerMovement.StopMovement();
     }
 }
 #endregion
@@ -185,7 +193,7 @@ public class JumpingState : PlayerState
 #region WallJumpingState
 public class WallJumpingState : PlayerState
 {
-    public WallJumpingState(PlayerComponents controller) : base(controller) {}
+    public WallJumpingState(PlayerComponents components) : base(components) {}
 
     public override void Enter()
     {
@@ -209,6 +217,33 @@ public class WallJumpingState : PlayerState
         // playerMovement.EndJump();
     }
 }
+#endregion
+
+#region DashState
+public class DashingState : PlayerState
+{
+    public DashingState(PlayerComponents components) : base(components) {}
+
+    public override void Enter()
+    {
+        components.playerDash.StartDash();
+        components.animator.SetBool("IsDashing", true);
+        // movement.DisableFacing();
+    }
+
+    public override void Update()
+    {
+        components.playerDash.DashUpdate();
+    }
+
+    public override void Exit()
+    {
+        components.playerDash.EndDash();
+        components.animator.SetBool("IsDashing", false);
+        // movement.EnableFacing();
+    }
+}
+
 #endregion
 
 

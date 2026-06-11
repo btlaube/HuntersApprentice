@@ -47,4 +47,17 @@ public class WorldDataManager : MonoBehaviour
         GameManager.Instance.SaveGame();
     }
 
+
+    public void OnDestroyedPermanentBreakable(string breakableID)
+    {
+        currentWorldData.destroyedBreakables.Add(breakableID);
+        GameManager.Instance.SaveGame();
+    }
+
+    public void OnItemCollected(string itemID)
+    {
+        currentWorldData.collectedItems.Add(itemID);
+        GameManager.Instance.SaveGame();
+    }
+
 }

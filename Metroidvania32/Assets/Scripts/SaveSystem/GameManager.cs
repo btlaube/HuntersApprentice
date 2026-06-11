@@ -7,6 +7,7 @@ public class GameManager : MonoBehaviour
 
     void Awake()
     {
+        Debug.Log("GameManager Awake");
         if (Instance != null && Instance != this)
         {
             Destroy(gameObject);

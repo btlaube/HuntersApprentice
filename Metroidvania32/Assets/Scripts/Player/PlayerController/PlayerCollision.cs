@@ -21,6 +21,7 @@ public class PlayerCollision : MonoBehaviour
     public bool hitCeiling;
     public bool hitLeftWall;
     public bool hitRightWall;
+    public bool HitWall => hitLeftWall || hitLeftWall;
 
     private Bounds bounds;
 
@@ -34,7 +35,7 @@ public class PlayerCollision : MonoBehaviour
 
     void UpdateBounds()
     {
-        bounds = components.boxCollider.bounds;
+        bounds = components.collider.bounds;
         bounds.Expand(skinWidth * -2f);
     }
 

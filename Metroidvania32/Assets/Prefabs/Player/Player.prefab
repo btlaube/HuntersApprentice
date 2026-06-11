@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3562953440392758653
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7407215875732134447}
+  m_Layer: 7
+  m_Name: RangedSpawnPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 2488908585195742037, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7407215875732134447
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3562953440392758653}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.6875, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4705400577651461993}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7228167948641479595
 GameObject:
   m_ObjectHideFlags: 0
@@ -11,12 +42,11 @@ GameObject:
   - component: {fileID: 4705400577651461993}
   - component: {fileID: 4351008874487736656}
   - component: {fileID: 7819624581255419870}
-  - component: {fileID: 5902782933815305673}
+  - component: {fileID: 1247489125759183049}
   - component: {fileID: 6449785450664147365}
   - component: {fileID: 2417988752059818090}
   - component: {fileID: 3840925907694173790}
   - component: {fileID: 159779372636634978}
-  - component: {fileID: 8416018801282822667}
   - component: {fileID: 4522722387655103321}
   - component: {fileID: 3475503861793384569}
   - component: {fileID: 5629273458061264139}
@@ -27,6 +57,7 @@ GameObject:
   - component: {fileID: -5852543918380452922}
   - component: {fileID: 5053041569215276445}
   - component: {fileID: 9084858586648301024}
+  - component: {fileID: 916178958449187926}
   m_Layer: 7
   m_Name: Player
   m_TagString: Player
@@ -48,6 +79,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 869304895745482850}
+  - {fileID: 7407215875732134447}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &4351008874487736656
@@ -136,8 +168,8 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 4
---- !u!61 &5902782933815305673
-BoxCollider2D:
+--- !u!70 &1247489125759183049
+CapsuleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -171,17 +203,8 @@ BoxCollider2D:
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1, y: 1}
-    newSize: {x: 1, y: 1}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  m_Size: {x: 1, y: 1}
-  m_EdgeRadius: 0
+  m_Size: {x: 0.56, y: 1}
+  m_Direction: 0
 --- !u!114 &6449785450664147365
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -253,56 +276,6 @@ MonoBehaviour:
   moveSpeed: 14
   acceleration: 100
   deceleration: 100
-  facingRight: 1
---- !u!114 &8416018801282822667
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7228167948641479595}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: da4f6920c06623b468d1280230b0e1c0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::JumpController
-  input: {fileID: 0}
-  velocity: {fileID: 3840925907694173790}
-  components: {fileID: 2417988752059818090}
-  collision: {fileID: 6449785450664147365}
-  jumpForce: 40
-  sustainedJumpForce: 40
-  maxJumpTime: 0.25
-  jumpForceCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  coyoteTime: 0.05
-  jumpCutMultiplier: 0
-  jumpTimer: 0
-  jumpConsumed: 0
-  shouldJump: 0
-  saveJumpThreshold: 0.15
 --- !u!114 &4522722387655103321
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -319,7 +292,7 @@ MonoBehaviour:
   components: {fileID: 2417988752059818090}
   collision: {fileID: 6449785450664147365}
   input: {fileID: 0}
-  jumpController: {fileID: 8416018801282822667}
+  defaultGravity: -20
 --- !u!114 &3475503861793384569
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -358,13 +331,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cacd032c85e975e468c24e5595517133, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerAttack
-  input: {fileID: 0}
-  attackSpawnPoint: {fileID: 869304895745482850}
-  attackDuration: 0.2
-  attackPrefab: {fileID: 5115527903734923776, guid: 31598fa48ababaa46969b939a57ab8fe, type: 3}
-  attackConsumed: 0
-  attackCooldown: 0.3
-  attackCooldownTimer: 0
+  playerComponents: {fileID: 2417988752059818090}
+  meleeAttackSpawnPoint: {fileID: 869304895745482850}
+  meleeAttackDuration: 0.5
+  meleeAttackPrefab: {fileID: 5115527903734923776, guid: 31598fa48ababaa46969b939a57ab8fe, type: 3}
+  meleeAttackConsumed: 0
+  meleeAttackCooldown: 0.1
+  meleeAttackCooldownTimer: 0
+  rangedAttackSpawnPoint: {fileID: 7407215875732134447}
+  rangedAttackPrefab: {fileID: 4875974327527275461, guid: 31a8b178df3361147b205f9fa52bd313, type: 3}
+  rangedAttackConsumed: 0
+  rangedAttackCooldown: 0.1
+  rangedAttackCooldownTimer: 0
 --- !u!114 &4369981218973376438
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -442,14 +420,10 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  coyoteTime: 0.05
-  jumpCutMultiplier: 0.35
-  jumpTimer: 0
-  jumpConsumed: 0
+  coyoteTime: 0.15
+  saveJumpThreshold: 0.05
   shouldJump: 0
-  saveJumpThreshold: 0.15
-  currentJumps: 0
-  maxJumps: 0
+  saveJumpTimer: 0
 --- !u!114 &5053041569215276445
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -485,6 +459,22 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &916178958449187926
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7228167948641479595}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef3cb493866e9ec449fa4a742e0cc17f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerDash
+  components: {fileID: 2417988752059818090}
+  dashForce: 25
+  maxDashTime: 0.125
+  dashCooldownDuration: 0.25
 --- !u!1 &8484629249316919416
 GameObject:
   m_ObjectHideFlags: 0

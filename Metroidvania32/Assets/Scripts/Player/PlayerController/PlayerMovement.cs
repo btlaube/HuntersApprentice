@@ -4,111 +4,106 @@ public class PlayerMovement : MonoBehaviour
 {
     [Header("References")]
     [SerializeField] private PlayerComponents components;
+
     private PlayerInputHandler input;
     private PlayerVelocity velocity;
 
-    [Header("Movement Parameters")]
+    [Header("Movement")]
     [SerializeField] private float moveSpeed = 8f;
 
     [Header("Acceleration")]
     [SerializeField] private float acceleration = 60f;
     [SerializeField] private float deceleration = 80f;
-    [SerializeField] private bool facingRight = true;
 
+    private bool facingRight = true;
     private bool facingLocked;
-    private float moveInput;
 
-    /*
-        Internal movement state.
-            Horizontal speed stored separately from Rigidbody 
-            velocity so movement stays clean and controllable.
-    */
+    private float moveInput;
     private float currentHorizontalSpeed;
 
-    void Start()
+    public float MoveInput => moveInput;
+    public float CurrentSpeed => currentHorizontalSpeed;
+
+    private void Start()
     {
-        // input = MasterInputHandler.Instance.playerInput;
         input = components.playerInput;
-        input.EnableInput();
-        // Debug.Log(input.horizontalInput);
         velocity = components.playerVelocity;
-        // HandleHorizontalMovement();
+
+        input.EnableInput();
     }
 
     private void FixedUpdate()
     {
-        if (!input.inputEnabled) 
-        {
-            velocity.SetHorizontalSpeed(0f);
-            return;
-        }
-        if (input == null || velocity == null)
-            return;
-
-        // if(components.stateManager.CurrentState is RunningState)
-        HandleHorizontalMovement();
+        ReadInput();
     }
 
-    private void HandleHorizontalMovement()
+    private void ReadInput()
     {
-        /*
-            Read player input.
-                Usually:
-                -1 = left
-                0 = idle
-                1 = right
-        */
+        if (input == null)
+            return;
+
         moveInput = input.horizontalInput.x;
 
-        /*
-            Calculate desired movement speed.
-        */
+        if (!facingLocked && Mathf.Abs(moveInput) > 0.01f)
+        {
+            components.FacingDirection =
+                moveInput > 0 ? 1 : -1;
+
+            HandleFacing();
+        }
+    }
+
+    public void MovementUpdate()
+    {
+        if (!input.inputEnabled)
+        {
+            currentHorizontalSpeed = 0f;
+            components.playerVelocity.SetHorizontalSpeed(0f);
+            return;
+        }
+
         float targetSpeed = moveInput * moveSpeed;
 
-        /*
-            Choose acceleration or deceleration.
-                If player is pressing movement:
-                    accelerate
-                Otherwise:
-                    decelerate
-        */
         float movementAcceleration =
             Mathf.Abs(targetSpeed) > 0.01f
-            ? acceleration
-            : deceleration;
+                ? acceleration
+                : deceleration;
 
-        /*
-            Smoothly move toward target speed.
-        */
         currentHorizontalSpeed = Mathf.MoveTowards(
             currentHorizontalSpeed,
             targetSpeed,
             movementAcceleration * Time.fixedDeltaTime
         );
 
-        /*
-            Send final horizontal movement
-            into PlayerVelocity.
-        */
-        velocity.SetHorizontalSpeed(currentHorizontalSpeed);
-        // components.playerAnimator.SetSpeed(currentHorizontalSpeed);
-
-
-        // Handle facing direction based on movement input.
-        if (!facingLocked)
-        {
-            HandleFacing();
-        }
-
-        /*
-            Optional debug.
-        */
-        // Debug.Log(
-        //     $"Input: {moveInput} | " +
-        //     $"Target: {targetSpeed} | " +
-        //     $"Current: {currentHorizontalSpeed}"
-        // );
+        components.playerVelocity.SetHorizontalSpeed(currentHorizontalSpeed);
     }
+
+    public void StopMovement()
+    {
+        currentHorizontalSpeed = 0f;
+        components.playerVelocity.SetHorizontalSpeed(0f);
+    }
+
+    public bool ShouldRun()
+    {
+        return Mathf.Abs(moveInput) > 0.01f;
+    }
+
+    public bool ShouldIdle()
+    {
+        return Mathf.Abs(moveInput) <= 0.01f;
+    }
+
+    public bool IsMoving()
+    {
+        return Mathf.Abs(currentHorizontalSpeed) > 0.1f;
+    }
+
+    public float GetHorizontalSpeed()
+    {
+        return currentHorizontalSpeed;
+    }
+
     public void EnableFacing()
     {
         facingLocked = false;
@@ -118,7 +113,6 @@ public class PlayerMovement : MonoBehaviour
     {
         facingLocked = true;
     }
-
 
     private void HandleFacing()
     {
@@ -139,24 +133,5 @@ public class PlayerMovement : MonoBehaviour
         Vector3 scale = transform.localScale;
         scale.x *= -1f;
         transform.localScale = scale;
-    }
-
-    /*
-        Optional helper methods.
-    */
-    public bool IsMoving()
-    {
-        return Mathf.Abs(currentHorizontalSpeed) > 0.1f;
-    }
-
-    public float GetHorizontalSpeed()
-    {
-        return currentHorizontalSpeed;
-    }
-
-    public void StopMovement()
-    {
-        currentHorizontalSpeed = 0f;
-        velocity.SetHorizontalSpeed(0f);
     }
 }

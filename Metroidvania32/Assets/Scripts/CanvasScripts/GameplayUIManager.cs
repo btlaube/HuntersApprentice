@@ -25,6 +25,8 @@ public class GameplayUIManager : MonoBehaviour
     private void OnDisable()
     {
         MasterInputHandler.Instance.uiInput.OnPause -= TogglePause;
+        MasterInputHandler.Instance.uiInput.OnInventory -= ToggleInventory;
+        MasterInputHandler.Instance.uiInput.OnMap -= ToggleMap;
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -141,6 +143,7 @@ public class GameplayUIManager : MonoBehaviour
     public void OpenInventory()
     {
         inventoryUI.Show();
+        inventoryUI.SetFirstSelected();
     }
 
     public void OpenMap()

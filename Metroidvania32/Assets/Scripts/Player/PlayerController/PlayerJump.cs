@@ -4,6 +4,7 @@ public class PlayerJump : MonoBehaviour
 {
     [Header("References")]
     [SerializeField] private PlayerComponents components;
+
     private PlayerInputHandler input;
     private PlayerVelocity velocity;
     private PlayerCollision collision;
@@ -19,145 +20,119 @@ public class PlayerJump : MonoBehaviour
     [SerializeField] private AnimationCurve jumpForceCurve =
         AnimationCurve.EaseInOut(3, 2, 1, 0);
 
+    [Header("Coyote Time")]
     [SerializeField] private float coyoteTime = 0.1f;
     private float coyoteTimer;
 
-    [Header("Jump Cut")]
-    [SerializeField] private float jumpCutMultiplier = 0.35f;
+    [Header("Jump Buffer")]
+    [SerializeField] private float saveJumpThreshold = 0.1f;
 
+    public bool shouldJump;
+    public float saveJumpTimer;
+
+    [Header("Jump State")]
     public bool JumpStarted { get; private set; }
 
-    [SerializeField] private float jumpTimer;
+    private float jumpTimer;
+    private bool jumpConsumed;
 
-    [SerializeField] private bool jumpConsumed;
-    public bool shouldJump;
-    public float saveJumpThreshold;
-    private float saveJumpTimer;
-
-    public int currentJumps;
-    public int maxJumps;
-
-    public bool JumpExpired =>
-        jumpTimer >= maxJumpTime;
-
-    public bool JumpReleased =>
-        !input.isJumping;
-
-    void Start()
+    private void Start()
     {
-        // input = MasterInputHandler.Instance.playerInput;
         input = components.playerInput;
         velocity = components.playerVelocity;
         collision = components.playerCollision;
-
-        JumpStarted = false;
-        jumpTimer = 0f;
-        coyoteTimer = coyoteTime;
     }
 
     private void FixedUpdate()
     {
-        if (!input.inputEnabled)
-        {
-            velocity.SetVerticalSpeed(0.0f);
-            return;
-        }
-        if (input == null || velocity == null)
-            return;
-
-        coyoteTimer = collision.isGrounded ? coyoteTime : coyoteTimer - Time.fixedDeltaTime;
-
-        HandleJump();
-        HandleVariableJump();
+        UpdateJumpInput();
     }
 
-    /*
-        INITIAL JUMP
-    */
-    private void HandleJump()
+    public void UpdateJumpInput()
     {
-        if (input.isJumping && !shouldJump && !jumpConsumed)
+        // Coyote Time
+        if (collision.isGrounded)
+        {
+            coyoteTimer = coyoteTime;
+        }
+        else
+        {
+            coyoteTimer -= Time.fixedDeltaTime;
+        }
+
+        // Jump Buffer
+        if (input.isJumping && !shouldJump && !JumpStarted)
         {
             shouldJump = true;
             saveJumpTimer = 0f;
         }
 
-        if (input.isJumping && !JumpStarted && coyoteTimer > 0f && !jumpConsumed)
-        {
-            velocity.SetVerticalSpeed(jumpForce);
-            JumpStarted = true;
-            jumpTimer = 0f;
-            jumpConsumed = true;
-            components.animator.SetBool("IsJumping", true);
-        }
-        
         if (shouldJump)
         {
             saveJumpTimer += Time.fixedDeltaTime;
-        }
-        if (saveJumpTimer > saveJumpThreshold)
-        {
-            shouldJump = false;
-            jumpConsumed = true;
+
+            if (saveJumpTimer > saveJumpThreshold)
+            {
+                shouldJump = false;
+            }
         }
 
+        // Reset consumption when jump released
         if (!input.isJumping)
         {
             jumpConsumed = false;
         }
-
     }
 
-    /*
-        VARIABLE HEIGHT / SMOOTH ARC
-    */
-    private void HandleVariableJump()
+    public bool ShouldStartJump()
     {
-        if (collision.hitCeiling)
-        {
-            CutJump();
+        return shouldJump
+            && coyoteTimer > 0f
+            && !jumpConsumed;
+    }
+
+    public void StartJump()
+    {
+        velocity.SetVerticalSpeed(jumpForce);
+
+        JumpStarted = true;
+        jumpTimer = 0f;
+
+        shouldJump = false;
+        jumpConsumed = true;
+    }
+
+    public void JumpUpdate()
+    {
+        if (!JumpStarted)
             return;
-        }
-        if (JumpStarted)
+
+        jumpTimer += Time.fixedDeltaTime;
+
+        if (input.isJumping && jumpTimer < maxJumpTime)
         {
-            jumpTimer += Time.fixedDeltaTime;
+            float sustainedForce =
+                sustainedJumpForce *
+                jumpForceCurve.Evaluate(
+                    jumpTimer / maxJumpTime);
 
-            if (input.isJumping && jumpTimer < maxJumpTime)
-            {
-                shouldJump = false;
-
-                float sustainedForce = sustainedJumpForce * jumpForceCurve.Evaluate(jumpTimer / maxJumpTime);
-                velocity.SetVerticalSpeed(Mathf.Max(jumpForce, sustainedForce));
-            }
-            else
-            {
-                CutJump();
-            }
+            velocity.SetVerticalSpeed(
+                Mathf.Max(jumpForce, sustainedForce));
         }
     }
 
-    /*
-        SHORT HOP / MINIMUM JUMP HEIGHT
-    */
-    private void CutJump()
+    public bool ShouldFall()
+    {
+        return collision.hitCeiling
+            || !input.isJumping
+            || jumpTimer >= maxJumpTime;
+    }
+
+    public void EndJump()
     {
         velocity.SetVerticalSpeed(0f);
-
+        
         JumpStarted = false;
         jumpTimer = 0f;
-        // shouldJump = false;
-        // components.animator.SetBool("IsJumping", false);
-        // components.animator.SetBool("IsFalling", true);
     }
-
-    public bool ShouldJump()
-    {
-        return shouldJump;
-    }
-
-    public bool JumpEnded()
-    {
-        return jumpTimer >= maxJumpTime || !input.isJumping;
-    }
-
 }
