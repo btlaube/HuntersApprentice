@@ -106,7 +106,7 @@ public class GameplayUIManager : MonoBehaviour
         {
             CloseInventory();
             inventoryOpen = false;
-            // PauseManager.Paused = false;
+            PauseManager.Instance.SetGamePaused(false);
         }
         else if (pauseOpen)
         {
@@ -126,7 +126,7 @@ public class GameplayUIManager : MonoBehaviour
         {
             OpenInventory();
             inventoryOpen = true;
-            // PauseManager.Paused = true;
+            PauseManager.Instance.SetGamePaused(true);
         }
     }
 
