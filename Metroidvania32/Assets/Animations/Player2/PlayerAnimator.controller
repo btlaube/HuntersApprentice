@@ -332,7 +332,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: PlayerRanged
-  m_Speed: 1
+  m_Speed: 0.125
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: 7310912612612544892}
@@ -345,7 +345,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: b0d2a68c9ad81a84ebb5d7e54b79d6ac, type: 2}
+  m_Motion: {fileID: 7400000, guid: 1a0d929d31eceda4b9647a3276882139, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
