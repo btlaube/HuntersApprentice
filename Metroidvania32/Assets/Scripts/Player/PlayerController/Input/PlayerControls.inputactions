@@ -393,17 +393,6 @@
                 },
                 {
                     "name": "",
-                    "id": "a6199728-2c32-4454-b2f7-2ae9cf7dc707",
-                    "path": "<Keyboard>/w",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Jump",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "8435b3de-dc42-4861-849e-182ebc902d09",
                     "path": "<Keyboard>/upArrow",
                     "interactions": "",

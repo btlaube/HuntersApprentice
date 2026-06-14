@@ -6,6 +6,7 @@ TagManager:
   tags:
   - LevelLoader
   - Hazard
+  - PlayerHitbox
   layers:
   - Default
   - TransparentFX
@@ -18,7 +19,7 @@ TagManager:
   - Ground
   - Enemy
   - PlayerAttack
-  - 
+  - PlayerHitbox
   - 
   - 
   - 
