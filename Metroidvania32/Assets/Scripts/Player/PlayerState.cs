@@ -29,7 +29,7 @@ public class IdleState : PlayerState
         // Debug.Log("Enter Idle");
         // playerMovement.currentJumps = 0;
         components.animator.SetFloat("Speed", 0.0f);
-        components.playerMovement.StopMovement();
+        // components.playerMovement.StopMovement();
     }
 
     public override void Update()
@@ -66,7 +66,7 @@ public class RunningState : PlayerState
     public override void Exit()
     {
         // Debug.Log("Exit Running");
-        components.playerMovement.StopMovement();
+        // components.playerMovement.StopMovement();
     }
 }
 #endregion
@@ -128,6 +128,7 @@ public class WallClingingState : PlayerState
         // playerMovement.rb.gravityScale = playerMovement.wallClingGravityScale;
         // playerMovement.SetYVelocity(0.0f);
         // playerMovement.currentJumps = 0;
+        // components.animator.SetBool("IsWallClinging", true);
     }
 
     public override void Update()
@@ -147,12 +148,14 @@ public class WallClingingState : PlayerState
         // {
         //     playerMovement.FlipSprite(true);
         // }
+        components.playerWallCling.WallClingUpdate();
     }
 
     public override void Exit()
     {
         // Debug.Log("Exit WallClinging");
         // playerAnimator.SetBool("IsOnWall", false);
+        // components.animator.SetBool("IsWallClinging", false);
     }
 }
 #endregion
@@ -202,12 +205,15 @@ public class WallJumpingState : PlayerState
         // playerAudio.Play("Jump");
         // playerMovement.wallJumpParticles.Play();
         // playerMovement.WallJump();
+        components.animator.SetBool("IsJumping", true);
+        components.playerWallJump.StartWallJump();
     }
 
     public override void Update()
     {
         // Debug.Log("WallJumping");
         // playerMovement.WallJumpUpdate();
+        components.playerWallJump.WallJumpUpdate();
     }
 
     public override void Exit()
@@ -215,6 +221,8 @@ public class WallJumpingState : PlayerState
         // Debug.Log("Exit WallJumping");
         // playerAnimator.SetBool("IsJumping", false);
         // playerMovement.EndJump();
+        components.animator.SetBool("IsJumping", false);
+        components.playerWallJump.EndWallJump();
     }
 }
 #endregion

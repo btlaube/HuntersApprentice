@@ -136,6 +136,8 @@ GameObject:
   - component: {fileID: 5053041569215276445}
   - component: {fileID: 9084858586648301024}
   - component: {fileID: 916178958449187926}
+  - component: {fileID: 6590186702884604555}
+  - component: {fileID: 8122700590435556937}
   m_Layer: 7
   m_Name: Player
   m_TagString: Player
@@ -554,6 +556,36 @@ MonoBehaviour:
   dashForce: 25
   maxDashTime: 0.125
   dashCooldownDuration: 0.25
+--- !u!114 &6590186702884604555
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7228167948641479595}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a2ef207ebdf56a242ab69eacfbea8bb8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerWallCling
+  components: {fileID: 2417988752059818090}
+  wallSlideSpeed: 8
+--- !u!114 &8122700590435556937
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7228167948641479595}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba6b87cf23762b147b8d11f2699b3f5a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerWallJump
+  components: {fileID: 2417988752059818090}
+  wallJumpHorizontalForce: 40
+  wallJumpVerticalForce: 30
+  wallJumpDuration: 0.25
 --- !u!1 &8484629249316919416
 GameObject:
   m_ObjectHideFlags: 0

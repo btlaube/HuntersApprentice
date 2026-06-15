@@ -17,6 +17,8 @@ public class PlayerComponents : MonoBehaviour
     public PlayerInputHandler playerInput {get; private set;}
     public PlayerAnimator playerAnimator {get; private set;}
     public PlayerGravity playerGravity {get; private set;}
+    public PlayerWallJump playerWallJump {get; private set;}
+    public PlayerWallCling playerWallCling {get; private set;}
 
     void Awake()
     {
@@ -32,5 +34,7 @@ public class PlayerComponents : MonoBehaviour
         playerAnimator = GetComponent<PlayerAnimator>();
         animator = GetComponent<Animator>();
         playerGravity = GetComponent<PlayerGravity>();
+        playerWallJump = GetComponent<PlayerWallJump>();
+        playerWallCling = GetComponent<PlayerWallCling>();
     }
 }

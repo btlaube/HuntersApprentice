@@ -21,14 +21,26 @@ public class PlayerCollision : MonoBehaviour
     public bool hitCeiling;
     public bool hitLeftWall;
     public bool hitRightWall;
-    public bool HitWall => hitLeftWall || hitLeftWall;
+    public bool HitWall => hitLeftWall || hitRightWall;
+    public int WallDirection
+    {
+        get
+        {
+            if (hitLeftWall)
+                return -1;
+
+            if (hitRightWall)
+                return 1;
+
+            return 0;
+        }
+    }
 
     private Bounds bounds;
 
-    void Update()
+    void FixedUpdate()
     {
         UpdateBounds();
-
         CheckVerticalCollisions();
         CheckHorizontalCollisions();
     }
