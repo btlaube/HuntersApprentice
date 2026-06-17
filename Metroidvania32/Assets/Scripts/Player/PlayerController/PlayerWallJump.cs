@@ -15,7 +15,6 @@ public class PlayerWallJump : MonoBehaviour
 
     private float wallJumpTimer;
 
-
     public bool ShouldStartWallJump()
     {
         return components.playerInput.isJumping
@@ -44,11 +43,11 @@ public class PlayerWallJump : MonoBehaviour
 
         int wallDirection = components.playerCollision.WallDirection;
 
-        components.playerVelocity.SetHorizontalSpeed(
-            -wallDirection * wallJumpHorizontalForce);
+        // components.playerVelocity.SetHorizontalSpeed(
+        //     -wallDirection * wallJumpHorizontalForce);
 
-        components.playerVelocity.SetVerticalSpeed(
-            wallJumpVerticalForce);
+        // components.playerVelocity.SetVerticalSpeed(
+        //     wallJumpVerticalForce);
 
         wallJumpTimer += Time.fixedDeltaTime;
     }

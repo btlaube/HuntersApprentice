@@ -31,6 +31,11 @@ public class PlayerGravity : MonoBehaviour
     }
 
 
+    public void SetGravity(float newGravity)
+    {
+        velocity.SetGravityVelocity(new Vector2(0f, newGravity));
+    }
+
     public void EnableGravity()
     {
         velocity.SetGravityVelocity(new Vector2(0f, defaultGravity));

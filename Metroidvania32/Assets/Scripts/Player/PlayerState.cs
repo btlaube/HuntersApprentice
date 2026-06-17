@@ -29,7 +29,7 @@ public class IdleState : PlayerState
         // Debug.Log("Enter Idle");
         // playerMovement.currentJumps = 0;
         components.animator.SetFloat("Speed", 0.0f);
-        // components.playerMovement.StopMovement();
+        components.playerMovement.StopMovement();
     }
 
     public override void Update()
@@ -59,14 +59,14 @@ public class RunningState : PlayerState
     {
         Debug.Log("Running");
         components.animator.SetFloat("Speed", Mathf.Abs(components.playerVelocity.GetMovementVelocity().x));
-        Debug.Log($"Set animator speed to {Mathf.Abs(components.playerVelocity.GetMovementVelocity().x)}");
+        // Debug.Log($"Set animator speed to {Mathf.Abs(components.playerVelocity.GetMovementVelocity().x)}");
         components.playerMovement.MovementUpdate();
     }
 
     public override void Exit()
     {
         // Debug.Log("Exit Running");
-        // components.playerMovement.StopMovement();
+        components.playerMovement.StopMovement();
     }
 }
 #endregion
@@ -111,7 +111,7 @@ public class FallingState : PlayerState
     {
         components.animator.SetBool("IsFalling", false);
         // Debug.Log("Exit Falling");
-        // components.playerMovement.StopMovement();
+        components.playerMovement.StopMovement();
     }
 }
 #endregion
@@ -156,6 +156,7 @@ public class WallClingingState : PlayerState
         // Debug.Log("Exit WallClinging");
         // playerAnimator.SetBool("IsOnWall", false);
         // components.animator.SetBool("IsWallClinging", false);
+        components.playerWallCling.EndWallCling();
     }
 }
 #endregion
@@ -214,6 +215,7 @@ public class WallJumpingState : PlayerState
         // Debug.Log("WallJumping");
         // playerMovement.WallJumpUpdate();
         components.playerWallJump.WallJumpUpdate();
+        components.playerMovement.MovementUpdate();
     }
 
     public override void Exit()
